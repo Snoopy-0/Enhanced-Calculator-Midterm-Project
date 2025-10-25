@@ -45,3 +45,6 @@ pytest --cov=app --cov-fail-under=90
 - **Config (.env)**
   See `.env` for directory, precision, autosave, and file paths. Defaults are provided.
 
+- **Coloring**
+  added color-coded outputs to improve the readability and user experience of the application.
+
