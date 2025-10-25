@@ -1,5 +1,6 @@
 import pytest
 from app.operations import OperationFactory
+from app.exceptions import OperationError
 
 @pytest.mark.parametrize("op,a,b,expected", [
     ("add", 2, 3, 5),
@@ -17,10 +18,16 @@ def test_operations(op, a, b, expected):
     fn = OperationFactory.create(op)
     assert fn.execute(a, b) == pytest.approx(expected)
 
-def test_divide_by_zero():
-    with pytest.raises(Exception):
-        OperationFactory.create("divide").execute(1, 0)
+@pytest.mark.parametrize("op,a,b", [
+    ("divide", 1, 0),
+    ("modulus", 5, 0),
+    ("int_divide", 5, 0),
+    ("root", -8, 2),
+])
+def test_operation_errors(op, a, b):
+    with pytest.raises(OperationError):
+        OperationFactory.create(op).execute(a, b)
 
 def test_unknown_operation():
-    with pytest.raises(Exception):
+    with pytest.raises(OperationError):
         OperationFactory.create("nope")
